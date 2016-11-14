@@ -1,0 +1,161 @@
+<project name="Meditation" default="create-jar" basedir="..">
+
+<!--
+ * Copyright 2009 Alvin J. Alexander, devdaily.com.
+ * 
+ * This file is part of my "Meditation" application.
+ *
+ * The Meditation application is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * The Meditation application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the Meditation application.  If not, see <http://www.gnu.org/licenses/>.
+ *
+-->
+
+  <!-- properties: basic -->
+  <property name="build.dir" value="build" />
+  <!--property file="${build.dir}/build.xml" /-->
+  <property name="jar.dir" value="jar" />
+  <property name="lib.dir" value="lib" />
+  <property name="release.dir" value="release" />
+  <property name="src.dir" value="src" />
+  <property name="classes.dir" value="classes" />
+  <property name="resource.dir" value="resources" />
+
+  <!-- properties: sound file -->
+  <!--property name="soundfile.src" value="${resource.dir}/gong.au" />
+  <property name="soundfile.dest" value="${classes.dir}/com/devdaily/meditation/gong.au" /-->
+  
+  <property name="soundfile.src" value="${resource.dir}/" />
+  <property name="soundfile.dest" value="${classes.dir}/edu/montavisa/mango/" />
+
+  <!-- properties: application-specific properties -->
+  <property name="jar-file-name" value="meditation.jar" />
+  <property name="manifest-file-name" value="meditation.manifest" />
+  <property name="mac.aboutname" value="Meditation" />
+  
+  <!-- properties: jarbundler properties (mac-only) -->
+  <property name="jarbundler.name" value="Meditation" />
+  <property name="jarbundler.shortname" value="Meditation" />
+  <property name="jarbundler.signature" value="Audrey Cui, monta vista high schooler" />
+  <property name="jarbundler.mainclass" value="edu.montavisa.mango.Meditation" />
+  <property name="jarbundler.icon" value="build/meditation.icns" />
+  <property name="jarbundler.jvmversion" value="1.7+" />
+  <property name="jarbundler.version" value="0.92" />
+  <property name="jarbundler.infostring" value="Reponse test, v0.1, November, 2016" />
+  <property name="jarbundler.build" value="1000" />
+  <property name="jarbundler.bundleid" value="edu.montavisa.mango.Meditation" />
+  <property name="jarbundler.apple.laf.useScreenMenuBar" value="true"/>
+  <property name="jarbundler.apple.awt.brushMetal" value="true"/>
+  <property name="jarbundler.apple.awt.showGrowBox" value="true"/>
+  <property name="jarbundler.com.apple.mrj.application.apple.menu.about.name" value="${mac.aboutname}"/>
+  <property name="jarbundler.apple.awt.textantialiasing" value="true"/>
+ 
+  <!--taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" /-->
+
+  <path id="class.path">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar"/>
+      <include name="**/*.zip"/>
+    </fileset>
+  </path>
+
+  <target name="init">
+    <tstamp/>
+  </target>
+
+  <target name="create-classes-dir" depends="init">
+    <mkdir dir="${classes.dir}"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="${classes.dir}"/>
+  </target>
+
+  <!-- compile: compile all our code to the "classes" directory -->
+  <target name="compile" depends="clean,create-classes-dir">
+    <javac destdir="${classes.dir}" source="1.5" >
+      <src path="${src.dir}"/>
+      <exclude name="**/_*.java"/>
+      <exclude name="**/Test*.java"/>
+      <classpath refid="class.path"/>
+    </javac>
+  </target>
+
+  <!-- jar: copy all needed resources, then make the jar file -->
+  <target name="create-jar" depends="compile">
+
+    <!-- specific to this app: copy our sound file to the correct classes directory -->
+    <copy todir="${soundfile.dest}">
+      <fileset dir="${soundfile.src}">
+        <include name="*.wav"/>
+        <include name="*.au"/>
+      </fileset>
+    </copy>
+
+    <!-- copy any image files in our src directories to the same "classes" directory -->
+    <copy todir="${classes.dir}">
+      <fileset dir="${src.dir}">
+        <include name="**/*.gif"/>
+        <include name="**/*.jpg"/>
+        <include name="**/*.png"/>
+      </fileset>
+    </copy>
+    
+    <!-- create the jar file from our compiled classes and manifest file -->
+    <jar basedir="${classes.dir}" jarfile="${jar.dir}/${jar-file-name}" manifest="${build.dir}/${manifest-file-name}"/>
+    
+    <!-- copy any libraries our application depends on -->
+    <copy todir="${jar.dir}">
+      <fileset dir="${lib.dir}">
+        <include name="**/*.jar"/>
+        <include name="**/*.zip"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- mac/jar bundle: create our mac os x bundle based on our jar file, our libraries, and these properties -->
+  <!--target name="create-bundle" depends="create-jar">
+    <jarbundler dir="${release.dir}"
+                name="Meditation"
+                shortname="${jarbundler.shortnamejarbundler.shortname}"
+                signature="${jarbundler.signature}"
+                mainclass="${jarbundler.mainclass}" 
+                icon="${jarbundler.icon}"
+                jvmversion="${jarbundler.jvmversion}"
+                version="${jarbundler.version}"
+                infostring="${jarbundler.infostring}"
+                build="${jarbundler.build}"
+                bundleid="${jarbundler.bundleid}">
+
+      <jarfileset dir="${jar.dir}">
+        <include name="**/*.jar" />
+        <exclude name="**/CVS" />
+      </jarfileset>
+
+      <javaproperty name="apple.laf.useScreenMenuBar" value="${jarbundler.apple.laf.useScreenMenuBar}"/>
+      <javaproperty name="apple.awt.brushMetal" value="${jarbundler.apple.awt.brushMetal}"/>
+      <javaproperty name="apple.awt.showGrowBox" value="${jarbundler.apple.awt.showGrowBox}"/>
+      <javaproperty name="com.apple.mrj.application.apple.menu.about.name" value="${jarbundler.com.apple.mrj.application.apple.menu.about.name}"/>
+      <javaproperty name="apple.awt.textantialiasing" value="${jarbundler.apple.awt.textantialiasing}"/>
+    </jarbundler>
+  </target-->
+
+</project>
+
+
+
+
+
+
+
+
+
