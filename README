@@ -1,0 +1,33 @@
+Mac OS X "Meditation" application
+
+java -cp .:\* edu.montavisa.mango.Meditation
+
+Version information
+-------------------
+
+This is Version 1.0 of the Meditation application, released on September 28, 2009.
+
+
+Building the application
+------------------------
+
+You can just run "ant" from the "build" directory to get this build to run, BUT, you will need Ant installed, and will need to properly install the jarbundler jar file into your ant/lib folder. See the "Mac OS X JarBundler Ant Task" project (http://informagen.com/JarBundler/) for more information on that.
+
+Running the "ant" command from the build directory will create a complete build of the Meditation application, i.e., the Meditation.app folder. This folder will be created in the "release" directory of this project.
+
+
+Running the application
+-----------------------
+
+To run the application, you can just cd over to the "release" folder, and then type this command:
+
+open Meditation.app
+
+Or, if you prefer, you can double-click the application icon from the Mac Finder.
+
+
+About the icon(s)
+=================
+
+The icon file is not mine, I just found it somewhere on my Mac OS X filesystem, and incorporated it into this project. I don't know what the licensing is for that icon, so I will see if I can create my own icon (.icns file) over time.
+

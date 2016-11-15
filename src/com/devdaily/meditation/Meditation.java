@@ -27,22 +27,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Meditation implements LineListener
 {
-  private static final String CYMBAL_CRASH = "gong.au";
-  private static final String CAT_SOUND = "cat_meow_x.wav";
-  private static final String DOG_SOUND = "dog_bark_x.wav";
-
-  private static final long[] elapseArray1 = new long[] {7, 4, 5, 2, 2, 7, 8, 6, 2, 5};
-  private static final String[] fileArray1 = new String[] {
-    CAT_SOUND, CAT_SOUND, CAT_SOUND, CAT_SOUND, CAT_SOUND,
-    CAT_SOUND, CAT_SOUND, CAT_SOUND, CAT_SOUND, CAT_SOUND
-  };
-
-  private static final long[] elapseArray2 = new long[] {5, 3, 8, 7, 2, 6, 8, 2, 8, 7};
-  private static final String[] fileArray2 = new String[] {
-    CYMBAL_CRASH, CAT_SOUND, CYMBAL_CRASH, CAT_SOUND, CAT_SOUND,
-    CYMBAL_CRASH, DOG_SOUND, CAT_SOUND, CYMBAL_CRASH, CAT_SOUND
-  };
-
   ThreadedCountdownField tcf;
   
   // our main frame
@@ -170,7 +154,7 @@ public class Meditation implements LineListener
     {
       public void actionPerformed(ActionEvent e)
       {
-        playGongSound(CAT_SOUND);
+        //playGongSound(CAT_SOUND);
       } 
     });
 
@@ -179,7 +163,7 @@ public class Meditation implements LineListener
     {
       public void actionPerformed(ActionEvent e)
       {
-        playGongSound(DOG_SOUND);
+        //playGongSound(DOG_SOUND);
       } 
     });
   }
@@ -192,7 +176,7 @@ public class Meditation implements LineListener
     // go from Start to Stop
     String desiredTimeString = timeEntryTextField.getText();
     long desiredSleepTime = 1;
-    String soundFile = CAT_SOUND;
+    //String soundFile = CAT_SOUND;
     try
     {
       // get the time in seconds, might be 0.5, 10, 10.5, whatever
@@ -226,7 +210,7 @@ public class Meditation implements LineListener
     testSoundButton.setEnabled(false);
     
     // desiredSleepTime needs to be in seconds
-    tcf = new ThreadedCountdownField(this, timeCountdownLabel, desiredSleepTime, soundFile);
+    tcf = new ThreadedCountdownField(this, timeCountdownLabel, desiredSleepTime);
 
     if (tcf.isAlive())
     {
@@ -285,7 +269,7 @@ public class Meditation implements LineListener
     doStopButtonClickedAction();
   }
   
-  private void playGongSound_old() 
+  public void playGongSound_old() 
   {
     try
     {
@@ -321,7 +305,7 @@ public class Meditation implements LineListener
    * Play a given audio file.
    * @param audioFilePath Path of the audio file.
    */
-  private void playGongSound(String audioFile) {
+  public void playGongSound(String audioFile) {
 
       try {
           //AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
